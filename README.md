@@ -1,2 +1,2 @@
 # NASA_2026_SPACEAPPSCHALLENGE
-Team 05FreeEquipAvaiOnTheMoon
+Team 505FreeEquipAvaiOnTheMoon
