@@ -1,0 +1,581 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>{{ item.title }}</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial,Helvetica,sans-serif;
+            background: #111;
+            color: white;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: black;
+            padding: 15px 30px;
+        }
+
+        .site-title {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .home-btn {
+            background: #0055ff;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-height: 600px;
+            object-fit: contain;
+            border-radius: 12px;
+            background: #000;
+        }
+
+        .description {
+            text-align: justify;
+            line-height: 1.8;
+            margin-top: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .map-panel,
+        .links-panel {
+            background: #1b1b1b;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        /* NEW MOON VIEWER */
+
+        .moon-toolbar {
+            margin-bottom: 15px;
+        }
+
+            .moon-toolbar button {
+                background: #0055ff;
+                color: white;
+                border: none;
+                padding: 8px 14px;
+                margin-right: 6px;
+                border-radius: 6px;
+                cursor: pointer;
+            }
+
+        #viewer {
+            width: 100%;
+            height: 700px;
+            overflow: hidden;
+            position: relative;
+            border-radius: 12px;
+            border: 1px solid #333;
+            background: black;
+        }
+
+        #moonContainer {
+            position: absolute;
+            cursor: grab;
+            transform-origin: center center;
+        }
+
+        #moonImage {
+            width: 1800px;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .marker {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .label {
+            position: absolute;
+            font-size: 12px;
+            color: white;
+            white-space: nowrap;
+            text-shadow: 0 0 4px black, 0 0 8px black;
+        }
+
+        .apollo {
+            background: #0099ff;
+        }
+
+        .crash {
+            background: #ff0000;
+        }
+
+        .surveyor {
+            background: #ffff00;
+        }
+
+        .rover {
+            background: #ff66ff;
+        }
+
+        .crater {
+            background: #aaaaaa;
+        }
+
+        .equipment {
+            background: #00ff00;
+        }
+
+        footer {
+            background: black;
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+        }
+
+            footer p {
+                margin: 5px;
+            }
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <div class="site-title">
+            NASA's Discarded Equipment on the Moon
+        </div>
+
+        <a href="/" class="home-btn">
+            Home
+        </a>
+
+    </header>
+
+    <div class="container">
+
+        <h1>{{ item.title }}</h1>
+
+        <div style="margin-bottom:20px;font-size:1.1rem;">
+
+            <strong>Wikipedia:</strong>
+
+            <a href="{{ item.wikipedia_url }}"
+               target="_blank"
+               style="color:#66aaff;">
+
+                {{ item.wikipedia_url }}
+
+            </a>
+
+        </div>
+
+        {% if item.nasa_images_url %}
+
+        <div style="margin-bottom:20px;">
+
+            <strong>NASA Images:</strong>
+
+            <a href="{{ item.nasa_images_url }}"
+               target="_blank">
+
+                {{ item.title }}
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+        <!-- NEW INTERACTIVE MAP -->
+
+        <div class="map-panel">
+
+            <h2>Interactive Lunar Map</h2>
+
+            <div class="moon-toolbar">
+
+                <button id="toggleLabels">
+                    Hide Labels
+                </button>
+
+                <button id="zoomIn">
+                    +
+                </button>
+
+                <button id="zoomOut">
+                    -
+                </button>
+
+                <button id="resetView">
+                    Reset
+                </button>
+
+            </div>
+
+            <div id="viewer">
+
+                <div id="moonContainer">
+
+                    <img id="moonImage"
+                         src="/static/images/moon_8k.jpg"
+                         alt="Moon">
+
+                    <!-- Current equipment location -->
+
+                    <div class="marker equipment"
+                         style="left:56%; top:46%;">
+                    </div>
+
+                    <div class="label"
+                         style="left:56%; top:43%;">
+                        {{ item.title }}
+                    </div>
+
+                    <!-- Apollo Sites -->
+
+                    <div class="marker apollo"
+                         style="left:56%;top:52%;"></div>
+                    <div class="label"
+                         style="left:56%;top:49%;">
+                        Apollo 11
+                    </div>
+
+                    <div class="marker apollo"
+                         style="left:58%;top:50%;"></div>
+                    <div class="label"
+                         style="left:58%;top:47%;">
+                        Apollo 12
+                    </div>
+
+                    <div class="marker apollo"
+                         style="left:60%;top:48%;"></div>
+                    <div class="label"
+                         style="left:60%;top:45%;">
+                        Apollo 14
+                    </div>
+
+                    <div class="marker apollo"
+                         style="left:64%;top:44%;"></div>
+                    <div class="label"
+                         style="left:64%;top:41%;">
+                        Apollo 15
+                    </div>
+
+                    <div class="marker apollo"
+                         style="left:67%;top:43%;"></div>
+                    <div class="label"
+                         style="left:67%;top:40%;">
+                        Apollo 16
+                    </div>
+
+                    <div class="marker apollo"
+                         style="left:69%;top:41%;"></div>
+                    <div class="label"
+                         style="left:69%;top:38%;">
+                        Apollo 17
+                    </div>
+
+                    <!-- Surveyor -->
+
+                    <div class="marker surveyor"
+                         style="left:52%;top:56%;"></div>
+                    <div class="label"
+                         style="left:52%;top:59%;">
+                        Surveyor 1
+                    </div>
+
+                    <div class="marker surveyor"
+                         style="left:58%;top:54%;"></div>
+                    <div class="label"
+                         style="left:58%;top:57%;">
+                        Surveyor 3
+                    </div>
+
+                    <!-- Crashes -->
+
+                    <div class="marker crash"
+                         style="left:50%;top:60%;"></div>
+                    <div class="label"
+                         style="left:50%;top:63%;">
+                        Ranger 8
+                    </div>
+
+                    <div class="marker crash"
+                         style="left:51%;top:62%;"></div>
+                    <div class="label"
+                         style="left:51%;top:65%;">
+                        Ranger 9
+                    </div>
+
+                    <!-- Chang'e -->
+
+                    <div class="marker rover"
+                         style="left:79%;top:35%;">
+                    </div>
+
+                    <div class="label"
+                         style="left:79%;top:32%;">
+                        Chang'e 4
+                    </div>
+
+                    <!-- Craters -->
+
+                    <div class="marker crater"
+                         style="left:44%;top:70%;">
+                    </div>
+
+                    <div class="label"
+                         style="left:44%;top:73%;">
+                        Tycho
+                    </div>
+
+                    <div class="marker crater"
+                         style="left:50%;top:57%;">
+                    </div>
+
+                    <div class="label"
+                         style="left:50%;top:60%;">
+                        Copernicus
+                    </div>
+
+                    <div class="marker crater"
+                         style="left:54%;top:28%;">
+                    </div>
+
+                    <div class="label"
+                         style="left:54%;top:25%;">
+                        Plato
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- <img class="hero-image"
+         src="/static/images/{{ item.hero_image }}"> -->
+
+        <div class="description">
+            {{ item.long_description }}
+        </div>
+
+        <div class="info-grid">
+
+            <div class="links-panel">
+
+                <h2>References</h2>
+
+                <a href="{{ item.wikipedia_url }}">
+                    Wikipedia
+                </a>
+
+                <h3>Mission</h3>
+                <p>{{ item.mission_name }}</p>
+
+                <h3>Region</h3>
+                <p>{{ item.moon_region }}</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer>
+
+        <p>
+            Albuquerque NM
+            Team 505FreeEquipmentAvailableOnTheMoon
+        </p>
+
+        <p>
+            2026 NASA Space Apps Challenge
+        </p>
+
+    </footer>
+
+    <script>
+
+        const moon =
+            document.getElementById(
+                'moonContainer'
+            );
+
+        const labels =
+            document.querySelectorAll(
+                '.label'
+            );
+
+        let scale = 1;
+        let posX = 0;
+        let posY = 0;
+
+        function updateTransform() {
+
+            moon.style.transform =
+                `translate(${posX}px,${posY}px)
+                 scale(${scale})`;
+
+        }
+
+        document
+            .getElementById('zoomIn')
+            .addEventListener(
+                'click',
+                () => {
+                    scale *= 1.2;
+                    updateTransform();
+                });
+
+        document
+            .getElementById('zoomOut')
+            .addEventListener(
+                'click',
+                () => {
+                    scale /= 1.2;
+                    updateTransform();
+                });
+
+        document
+            .getElementById('resetView')
+            .addEventListener(
+                'click',
+                () => {
+                    scale = 1;
+                    posX = 0;
+                    posY = 0;
+                    updateTransform();
+                });
+
+        let labelsVisible = true;
+
+        document
+            .getElementById('toggleLabels')
+            .addEventListener(
+                'click',
+                () => {
+
+                    labelsVisible = !labelsVisible;
+
+                    labels.forEach(label => {
+
+                        label.style.display =
+                            labelsVisible
+                                ? 'block'
+                                : 'none';
+
+                    });
+
+                    document
+                        .getElementById(
+                            'toggleLabels'
+                        ).innerText =
+                        labelsVisible
+                            ? 'Hide Labels'
+                            : 'Show Labels';
+
+                });
+
+        let dragging = false;
+        let startX = 0;
+        let startY = 0;
+
+        moon.addEventListener(
+            'mousedown',
+            e => {
+
+                dragging = true;
+
+                startX =
+                    e.clientX - posX;
+
+                startY =
+                    e.clientY - posY;
+
+            });
+
+        document.addEventListener(
+            'mousemove',
+            e => {
+
+                if (!dragging) return;
+
+                posX =
+                    e.clientX - startX;
+
+                posY =
+                    e.clientY - startY;
+
+                updateTransform();
+
+            });
+
+        document.addEventListener(
+            'mouseup',
+            () => {
+                dragging = false;
+            });
+
+        const viewer =
+            document.getElementById(
+                "viewer"
+            );
+
+        viewer.addEventListener(
+            "wheel",
+            function (e) {
+                e.preventDefault();
+
+                const zoomFactor = 1.1;
+
+                if (e.deltaY < 0) {
+                    // Wheel Up
+                    scale *= zoomFactor;
+                }
+                else {
+                    // Wheel Down
+                    scale /= zoomFactor;
+                }
+
+                // Limits
+
+                if (scale < 0.25)
+                    scale = 0.25;
+
+                if (scale > 20)
+                    scale = 20;
+
+                updateTransform();
+            }
+        );
+
+        updateTransform();
+
+
+    </script>
+
+</body>
+</html>
